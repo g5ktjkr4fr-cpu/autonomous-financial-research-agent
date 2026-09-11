@@ -5,126 +5,219 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Autonomous Financial Research Agent</title>
   <meta name="description" content="Interactive Agentic AI portfolio demo by Chantell Harris-Headley" />
-  <script type="module" crossorigin src="https://cdn.jsdelivr.net/npm/@gradio/lite/dist/lite.js"></script>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@gradio/lite/dist/lite.css" />
   <style>
-    html, body { margin: 0; padding: 0; min-height: 100%; background: #0b1020; }
+    :root {
+      color-scheme: dark;
+      --bg: #0b1020;
+      --panel: #12182a;
+      --panel2: #182036;
+      --text: #f5f7fb;
+      --muted: #aab4cc;
+      --accent: #7dd3fc;
+      --accent2: #a78bfa;
+      --border: #28324c;
+      --success: #86efac;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: linear-gradient(180deg, #0b1020 0%, #0e1426 100%);
+      color: var(--text);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    .wrap { max-width: 1180px; margin: 0 auto; padding: 48px 22px 64px; }
+    .hero { margin-bottom: 28px; }
+    .eyebrow { color: var(--accent); font-weight: 700; letter-spacing: .08em; text-transform: uppercase; font-size: 12px; }
+    h1 { font-size: clamp(34px, 6vw, 64px); line-height: 1.02; margin: 10px 0 16px; }
+    .lead { color: var(--muted); max-width: 860px; font-size: 18px; line-height: 1.65; }
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+    .card {
+      background: rgba(18, 24, 42, .92);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 22px;
+      box-shadow: 0 16px 40px rgba(0,0,0,.18);
+    }
+    label { display: block; font-size: 13px; font-weight: 700; color: var(--muted); margin-bottom: 8px; }
+    select, input {
+      width: 100%; background: #0f1528; color: var(--text); border: 1px solid var(--border);
+      border-radius: 12px; padding: 13px 14px; font-size: 15px; outline: none;
+    }
+    select:focus, input:focus { border-color: var(--accent); }
+    .field { margin-bottom: 16px; }
+    button {
+      width: 100%; border: 0; border-radius: 12px; padding: 14px 16px; cursor: pointer;
+      font-size: 15px; font-weight: 800; color: #07111c;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+    }
+    h2 { margin: 0 0 14px; font-size: 20px; }
+    h3 { margin: 22px 0 8px; font-size: 16px; }
+    .trace { list-style: none; padding: 0; margin: 0; counter-reset: step; }
+    .trace li { counter-increment: step; padding: 10px 0 10px 40px; position: relative; border-bottom: 1px solid #222b42; color: #d8def0; }
+    .trace li:last-child { border-bottom: 0; }
+    .trace li::before {
+      content: counter(step); position: absolute; left: 0; top: 8px; width: 26px; height: 26px;
+      display: grid; place-items: center; border-radius: 50%; background: #1f2a44; color: var(--accent); font-size: 12px; font-weight: 800;
+    }
+    .pill { display: inline-block; padding: 6px 9px; border-radius: 999px; border: 1px solid var(--border); background: #11192c; color: #dce5fb; margin: 4px 6px 4px 0; font-size: 12px; }
+    .metric { display: grid; grid-template-columns: 145px 1fr; gap: 10px; padding: 8px 0; border-bottom: 1px solid #222b42; }
+    .metric:last-child { border-bottom: 0; }
+    .metric strong { color: var(--muted); font-size: 13px; }
+    .note { margin-top: 18px; padding: 14px; border-left: 3px solid var(--accent2); background: #11192c; color: var(--muted); border-radius: 8px; line-height: 1.55; }
+    .footer { margin-top: 28px; color: var(--muted); font-size: 14px; }
+    a { color: var(--accent); }
+    .hidden { display: none; }
+    @media (max-width: 820px) { .grid { grid-template-columns: 1fr; } }
   </style>
 </head>
 <body>
-<gradio-lite theme="dark">
-import gradio as gr
+  <main class="wrap">
+    <section class="hero">
+      <div class="eyebrow">Agentic AI Portfolio Demo</div>
+      <h1>Autonomous Financial Research Agent</h1>
+      <p class="lead">Explore how a goal-oriented AI research workflow plans tool calls, combines market and research evidence, evaluates risk, handles data gaps, and produces a transparent research briefing.</p>
+    </section>
 
-SAMPLES = {
-    "NVDA": {
-        "company": "NVIDIA",
-        "summary": "Demonstrates how the agent combines market data, historical performance, news sentiment, and AI-initiative research into a structured briefing.",
-        "tools": ["Stock Price", "3-Year History", "Financial News", "Sentiment Analysis", "RAG Research"],
-        "sentiment": "Positive",
-        "risk": "High expectations, valuation sensitivity, competition, and dependence on continued AI infrastructure demand.",
-        "ai": "GPU acceleration, generative AI platforms, developer tooling, and applied AI research.",
-        "confidence": "High",
-    },
-    "MSFT": {
-        "company": "Microsoft",
-        "summary": "Demonstrates orchestration across financial metrics, market sentiment, and strategic AI initiatives before synthesizing a research conclusion.",
-        "tools": ["Stock Price", "3-Year History", "Financial News", "Sentiment Analysis", "RAG Research"],
-        "sentiment": "Positive",
-        "risk": "Execution risk across large AI investments, regulatory scrutiny, and competitive pressure in cloud and AI platforms.",
-        "ai": "Azure AI, copilots, enterprise AI tooling, and model/platform partnerships.",
-        "confidence": "High",
-    },
-    "GOOGL": {
-        "company": "Alphabet",
-        "summary": "Shows how a goal-oriented agent can gather evidence from multiple sources and distinguish factual inputs from interpretation.",
-        "tools": ["Stock Price", "3-Year History", "Financial News", "Sentiment Analysis", "RAG Research"],
-        "sentiment": "Positive",
-        "risk": "Advertising concentration, regulatory pressure, and intense competition in generative AI.",
-        "ai": "Gemini, cloud AI services, foundational research, and AI-enhanced consumer products.",
-        "confidence": "Medium-High",
-    },
-    "AMZN": {
-        "company": "Amazon",
-        "summary": "Illustrates a research workflow that blends market context, sentiment, and strategic AI activity into a transparent output.",
-        "tools": ["Stock Price", "3-Year History", "Financial News", "Sentiment Analysis", "RAG Research"],
-        "sentiment": "Mixed-Positive",
-        "risk": "Margin pressure, cloud competition, capital intensity, and execution complexity across business lines.",
-        "ai": "AWS AI services, Bedrock, machine learning infrastructure, and operational AI applications.",
-        "confidence": "Medium-High",
-    },
-    "IBM": {
-        "company": "IBM",
-        "summary": "Demonstrates how the agent can combine quantitative indicators with qualitative enterprise-AI strategy evidence.",
-        "tools": ["Stock Price", "3-Year History", "Financial News", "Sentiment Analysis", "RAG Research"],
-        "sentiment": "Neutral-Positive",
-        "risk": "Slower growth profile, competitive enterprise AI market, and execution risk in modernization strategy.",
-        "ai": "watsonx, Granite models, hybrid cloud AI, and enterprise automation.",
-        "confidence": "Medium",
-    },
-}
+    <section class="grid">
+      <div class="card">
+        <h2>Run Agent Workflow</h2>
+        <div class="field">
+          <label for="ticker">Choose a company</label>
+          <select id="ticker">
+            <option value="NVDA">NVIDIA (NVDA)</option>
+            <option value="MSFT">Microsoft (MSFT)</option>
+            <option value="GOOGL">Alphabet (GOOGL)</option>
+            <option value="AMZN">Amazon (AMZN)</option>
+            <option value="IBM">IBM (IBM)</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="focus">Optional research focus</label>
+          <input id="focus" placeholder="AI strategy, competitive risk, growth..." />
+        </div>
+        <button id="runBtn">Run Agent Workflow</button>
+      </div>
 
+      <div class="card">
+        <h2>Agent Decision Path</h2>
+        <ol class="trace" id="trace"></ol>
+      </div>
+    </section>
 
-def tool_trace(ticker):
-    item = SAMPLES[ticker]
-    return "\n".join([
-        "1. Interpret research objective",
-        "2. Call Stock Price tool",
-        "3. Call Historical Performance tool",
-        "4. Search financial news",
-        "5. Analyze sentiment",
-        "6. Query RAG research context",
-        "7. Check evidence gaps / tool failures",
-        "8. Synthesize structured briefing",
-        "9. Add confidence + limitations",
-    ])
+    <section class="card" style="margin-top:18px;">
+      <h2 id="reportTitle">Research Briefing</h2>
+      <div id="focusLine" class="hidden"></div>
+      <h3>Agent tool plan</h3>
+      <div id="tools"></div>
+      <h3>Example research synthesis</h3>
+      <div id="report"></div>
+      <div class="note">This free browser demo intentionally uses sanitized example content rather than live API calls. The full implementation in GitHub contains the Python/LangGraph workflow for autonomous tool orchestration, RAG, error handling, source attribution, and agent-state management. Educational portfolio demonstration only — not financial advice.</div>
+    </section>
 
+    <section class="card" style="margin-top:18px;">
+      <h2>Skills Demonstrated</h2>
+      <span class="pill">Agent architecture</span>
+      <span class="pill">LangGraph workflow design</span>
+      <span class="pill">Tool orchestration</span>
+      <span class="pill">RAG</span>
+      <span class="pill">Sentiment analysis</span>
+      <span class="pill">Error resilience</span>
+      <span class="pill">Source transparency</span>
+      <span class="pill">Responsible AI</span>
+      <p class="footer">Built by <strong>Chantell Harris-Headley</strong>. View the full technical implementation on <a href="https://github.com/g5ktjkr4fr-cpu/autonomous-financial-research-agent" target="_blank" rel="noopener">GitHub</a>.</p>
+    </section>
+  </main>
 
-def build_report(ticker, focus):
-    item = SAMPLES[ticker]
-    focus_line = f"\n**Research focus:** {focus}" if focus.strip() else ""
-    tools = ", ".join(item["tools"])
-    return f"""## {item['company']} ({ticker}) — Portfolio Demo\n\n{item['summary']}{focus_line}\n\n### Agent Tool Plan\n{tools}\n\n### Example Research Synthesis\n**Market sentiment:** {item['sentiment']}  \n**AI / technology themes:** {item['ai']}  \n**Illustrative risk review:** {item['risk']}  \n**Confidence:** {item['confidence']}\n\n### Transparency / Limitations\nThis free browser demo intentionally uses sanitized example content rather than live API calls. The full implementation in GitHub contains the Python/LangGraph workflow for autonomous tool orchestration, RAG, error handling, source attribution, and agent-state management.\n\n**Educational portfolio demonstration only — not financial advice.**"""
+  <script>
+    const SAMPLES = {
+      NVDA: {
+        company: "NVIDIA",
+        summary: "Demonstrates how the agent combines market data, historical performance, news sentiment, and AI-initiative research into a structured briefing.",
+        tools: ["Stock Price", "3-Year History", "Financial News", "Sentiment Analysis", "RAG Research"],
+        sentiment: "Positive",
+        risk: "High expectations, valuation sensitivity, competition, and dependence on continued AI infrastructure demand.",
+        ai: "GPU acceleration, generative AI platforms, developer tooling, and applied AI research.",
+        confidence: "High"
+      },
+      MSFT: {
+        company: "Microsoft",
+        summary: "Demonstrates orchestration across financial metrics, market sentiment, and strategic AI initiatives before synthesizing a research conclusion.",
+        tools: ["Stock Price", "3-Year History", "Financial News", "Sentiment Analysis", "RAG Research"],
+        sentiment: "Positive",
+        risk: "Execution risk across large AI investments, regulatory scrutiny, and competitive pressure in cloud and AI platforms.",
+        ai: "Azure AI, copilots, enterprise AI tooling, and model/platform partnerships.",
+        confidence: "High"
+      },
+      GOOGL: {
+        company: "Alphabet",
+        summary: "Shows how a goal-oriented agent can gather evidence from multiple sources and distinguish factual inputs from interpretation.",
+        tools: ["Stock Price", "3-Year History", "Financial News", "Sentiment Analysis", "RAG Research"],
+        sentiment: "Positive",
+        risk: "Advertising concentration, regulatory pressure, and intense competition in generative AI.",
+        ai: "Gemini, cloud AI services, foundational research, and AI-enhanced consumer products.",
+        confidence: "Medium-High"
+      },
+      AMZN: {
+        company: "Amazon",
+        summary: "Illustrates a research workflow that blends market context, sentiment, and strategic AI activity into a transparent output.",
+        tools: ["Stock Price", "3-Year History", "Financial News", "Sentiment Analysis", "RAG Research"],
+        sentiment: "Mixed-Positive",
+        risk: "Margin pressure, cloud competition, capital intensity, and execution complexity across business lines.",
+        ai: "AWS AI services, Bedrock, machine learning infrastructure, and operational AI applications.",
+        confidence: "Medium-High"
+      },
+      IBM: {
+        company: "IBM",
+        summary: "Demonstrates how the agent can combine quantitative indicators with qualitative enterprise-AI strategy evidence.",
+        tools: ["Stock Price", "3-Year History", "Financial News", "Sentiment Analysis", "RAG Research"],
+        sentiment: "Neutral-Positive",
+        risk: "Slower growth profile, competitive enterprise AI market, and execution risk in modernization strategy.",
+        ai: "watsonx, Granite models, hybrid cloud AI, and enterprise automation.",
+        confidence: "Medium"
+      }
+    };
 
+    const TRACE = [
+      "Interpret research objective",
+      "Call Stock Price tool",
+      "Call Historical Performance tool",
+      "Search financial news",
+      "Analyze sentiment",
+      "Query RAG research context",
+      "Check evidence gaps / tool failures",
+      "Synthesize structured briefing",
+      "Add confidence + limitations"
+    ];
 
-def run_demo(ticker, focus):
-    return tool_trace(ticker), build_report(ticker, focus)
+    function render() {
+      const ticker = document.getElementById("ticker").value;
+      const focus = document.getElementById("focus").value.trim();
+      const item = SAMPLES[ticker];
 
+      document.getElementById("trace").innerHTML = TRACE.map(step => `<li>${step}</li>`).join("");
+      document.getElementById("reportTitle").textContent = `${item.company} (${ticker}) — Portfolio Demo`;
+      document.getElementById("tools").innerHTML = item.tools.map(tool => `<span class="pill">${tool}</span>`).join("");
 
-with gr.Blocks(title="Autonomous Financial Research Agent") as demo:
-    gr.Markdown("# Autonomous Financial Research Agent")
-    gr.Markdown(
-        "**Agentic AI portfolio demo by Chantell Harris-Headley**  \n"
-        "Explore how a goal-oriented financial research agent plans tool calls, combines multiple evidence sources, handles limitations, and produces a transparent research briefing."
-    )
+      const focusLine = document.getElementById("focusLine");
+      if (focus) {
+        focusLine.classList.remove("hidden");
+        focusLine.innerHTML = `<div class="note" style="margin-top:0;margin-bottom:16px;"><strong>Research focus:</strong> ${focus}</div>`;
+      } else {
+        focusLine.classList.add("hidden");
+        focusLine.innerHTML = "";
+      }
 
-    with gr.Row():
-        ticker = gr.Dropdown(
-            choices=["NVDA", "MSFT", "GOOGL", "AMZN", "IBM"],
-            value="NVDA",
-            label="Choose a company",
-        )
-        focus = gr.Textbox(
-            label="Optional research focus",
-            placeholder="AI strategy, competitive risk, growth...",
-        )
+      document.getElementById("report").innerHTML = `
+        <p>${item.summary}</p>
+        <div class="metric"><strong>Market sentiment</strong><span>${item.sentiment}</span></div>
+        <div class="metric"><strong>AI / technology themes</strong><span>${item.ai}</span></div>
+        <div class="metric"><strong>Illustrative risk review</strong><span>${item.risk}</span></div>
+        <div class="metric"><strong>Confidence</strong><span style="color:var(--success);font-weight:700;">${item.confidence}</span></div>
+      `;
+    }
 
-    run_button = gr.Button("Run Agent Workflow", variant="primary")
-
-    with gr.Row():
-        trace = gr.Textbox(label="Agent decision path", lines=11)
-        report = gr.Markdown()
-
-    run_button.click(run_demo, inputs=[ticker, focus], outputs=[trace, report])
-
-    gr.Markdown(
-        "---\n"
-        "### Skills demonstrated\n"
-        "Agent architecture • LangGraph workflow design • Tool orchestration • RAG • Sentiment analysis • Error resilience • Source transparency • Responsible AI\n\n"
-        "**Full technical implementation:** [GitHub repository](https://github.com/g5ktjkr4fr-cpu/autonomous-financial-research-agent)"
-    )
-
-
-demo.launch()
-</gradio-lite>
+    document.getElementById("runBtn").addEventListener("click", render);
+    render();
+  </script>
 </body>
 </html>
