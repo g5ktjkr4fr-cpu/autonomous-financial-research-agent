@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Autonomous Financial Research Agent</title>
+  <meta name="description" content="Interactive Agentic AI portfolio demo by Chantell Harris-Headley" />
+  <script type="module" crossorigin src="https://cdn.jsdelivr.net/npm/@gradio/lite/dist/lite.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@gradio/lite/dist/lite.css" />
+  <style>
+    html, body { margin: 0; padding: 0; min-height: 100%; background: #0b1020; }
+  </style>
+</head>
+<body>
+<gradio-lite theme="dark">
+import gradio as gr
+
+SAMPLES = {
+    "NVDA": {
+        "company": "NVIDIA",
+        "summary": "Demonstrates how the agent combines market data, historical performance, news sentiment, and AI-initiative research into a structured briefing.",
+        "tools": ["Stock Price", "3-Year History", "Financial News", "Sentiment Analysis", "RAG Research"],
+        "sentiment": "Positive",
+        "risk": "High expectations, valuation sensitivity, competition, and dependence on continued AI infrastructure demand.",
+        "ai": "GPU acceleration, generative AI platforms, developer tooling, and applied AI research.",
+        "confidence": "High",
+    },
+    "MSFT": {
+        "company": "Microsoft",
+        "summary": "Demonstrates orchestration across financial metrics, market sentiment, and strategic AI initiatives before synthesizing a research conclusion.",
+        "tools": ["Stock Price", "3-Year History", "Financial News", "Sentiment Analysis", "RAG Research"],
+        "sentiment": "Positive",
+        "risk": "Execution risk across large AI investments, regulatory scrutiny, and competitive pressure in cloud and AI platforms.",
+        "ai": "Azure AI, copilots, enterprise AI tooling, and model/platform partnerships.",
+        "confidence": "High",
+    },
+    "GOOGL": {
+        "company": "Alphabet",
+        "summary": "Shows how a goal-oriented agent can gather evidence from multiple sources and distinguish factual inputs from interpretation.",
+        "tools": ["Stock Price", "3-Year History", "Financial News", "Sentiment Analysis", "RAG Research"],
+        "sentiment": "Positive",
+        "risk": "Advertising concentration, regulatory pressure, and intense competition in generative AI.",
+        "ai": "Gemini, cloud AI services, foundational research, and AI-enhanced consumer products.",
+        "confidence": "Medium-High",
+    },
+    "AMZN": {
+        "company": "Amazon",
+        "summary": "Illustrates a research workflow that blends market context, sentiment, and strategic AI activity into a transparent output.",
+        "tools": ["Stock Price", "3-Year History", "Financial News", "Sentiment Analysis", "RAG Research"],
+        "sentiment": "Mixed-Positive",
+        "risk": "Margin pressure, cloud competition, capital intensity, and execution complexity across business lines.",
+        "ai": "AWS AI services, Bedrock, machine learning infrastructure, and operational AI applications.",
+        "confidence": "Medium-High",
+    },
+    "IBM": {
+        "company": "IBM",
+        "summary": "Demonstrates how the agent can combine quantitative indicators with qualitative enterprise-AI strategy evidence.",
+        "tools": ["Stock Price", "3-Year History", "Financial News", "Sentiment Analysis", "RAG Research"],
+        "sentiment": "Neutral-Positive",
+        "risk": "Slower growth profile, competitive enterprise AI market, and execution risk in modernization strategy.",
+        "ai": "watsonx, Granite models, hybrid cloud AI, and enterprise automation.",
+        "confidence": "Medium",
+    },
+}
+
+
+def tool_trace(ticker):
+    item = SAMPLES[ticker]
+    return "\n".join([
+        "1. Interpret research objective",
+        "2. Call Stock Price tool",
+        "3. Call Historical Performance tool",
+        "4. Search financial news",
+        "5. Analyze sentiment",
+        "6. Query RAG research context",
+        "7. Check evidence gaps / tool failures",
+        "8. Synthesize structured briefing",
+        "9. Add confidence + limitations",
+    ])
+
+
+def build_report(ticker, focus):
+    item = SAMPLES[ticker]
+    focus_line = f"\n**Research focus:** {focus}" if focus.strip() else ""
+    tools = ", ".join(item["tools"])
+    return f"""## {item['company']} ({ticker}) — Portfolio Demo\n\n{item['summary']}{focus_line}\n\n### Agent Tool Plan\n{tools}\n\n### Example Research Synthesis\n**Market sentiment:** {item['sentiment']}  \n**AI / technology themes:** {item['ai']}  \n**Illustrative risk review:** {item['risk']}  \n**Confidence:** {item['confidence']}\n\n### Transparency / Limitations\nThis free browser demo intentionally uses sanitized example content rather than live API calls. The full implementation in GitHub contains the Python/LangGraph workflow for autonomous tool orchestration, RAG, error handling, source attribution, and agent-state management.\n\n**Educational portfolio demonstration only — not financial advice.**"""
+
+
+def run_demo(ticker, focus):
+    return tool_trace(ticker), build_report(ticker, focus)
+
+
+with gr.Blocks(title="Autonomous Financial Research Agent") as demo:
+    gr.Markdown("# Autonomous Financial Research Agent")
+    gr.Markdown(
+        "**Agentic AI portfolio demo by Chantell Harris-Headley**  \n"
+        "Explore how a goal-oriented financial research agent plans tool calls, combines multiple evidence sources, handles limitations, and produces a transparent research briefing."
+    )
+
+    with gr.Row():
+        ticker = gr.Dropdown(
+            choices=["NVDA", "MSFT", "GOOGL", "AMZN", "IBM"],
+            value="NVDA",
+            label="Choose a company",
+        )
+        focus = gr.Textbox(
+            label="Optional research focus",
+            placeholder="AI strategy, competitive risk, growth...",
+        )
+
+    run_button = gr.Button("Run Agent Workflow", variant="primary")
+
+    with gr.Row():
+        trace = gr.Textbox(label="Agent decision path", lines=11)
+        report = gr.Markdown()
+
+    run_button.click(run_demo, inputs=[ticker, focus], outputs=[trace, report])
+
+    gr.Markdown(
+        "---\n"
+        "### Skills demonstrated\n"
+        "Agent architecture • LangGraph workflow design • Tool orchestration • RAG • Sentiment analysis • Error resilience • Source transparency • Responsible AI\n\n"
+        "**Full technical implementation:** [GitHub repository](https://github.com/g5ktjkr4fr-cpu/autonomous-financial-research-agent)"
+    )
+
+
+demo.launch()
+</gradio-lite>
+</body>
+</html>
