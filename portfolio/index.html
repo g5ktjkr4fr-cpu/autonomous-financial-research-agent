@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chantell Harris-Headley | Agentic AI Portfolio</title>
+  <style>
+    :root {
+      --bg:#0b1020;
+      --panel:#121a2f;
+      --panel2:#17213a;
+      --text:#edf2ff;
+      --muted:#a9b5d1;
+      --accent:#7aa2ff;
+      --accent2:#8ee3cf;
+      --line:#273455;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;font-family:Inter,Arial,sans-serif;background:linear-gradient(180deg,#0b1020 0%,#10172b 100%);color:var(--text);line-height:1.6}
+    .wrap{max-width:1180px;margin:0 auto;padding:56px 24px 72px}
+    .hero{padding:44px 0 28px;border-bottom:1px solid var(--line)}
+    .eyebrow{color:var(--accent2);font-weight:700;letter-spacing:.08em;text-transform:uppercase;font-size:.82rem}
+    h1{font-size:clamp(2.3rem,5vw,4.8rem);line-height:1.02;margin:12px 0 18px}
+    .lead{max-width:820px;color:var(--muted);font-size:1.12rem}
+    .chips{display:flex;flex-wrap:wrap;gap:10px;margin:24px 0 0}
+    .chip{border:1px solid var(--line);background:#11192c;padding:8px 12px;border-radius:999px;color:#c8d4ef;font-size:.9rem}
+    .section{padding-top:42px}
+    .section h2{font-size:1.8rem;margin:0 0 10px}
+    .section-intro{color:var(--muted);max-width:850px;margin:0 0 24px}
+    .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+    .card{background:linear-gradient(180deg,var(--panel) 0%,var(--panel2) 100%);border:1px solid var(--line);border-radius:18px;padding:24px;display:flex;flex-direction:column;min-height:430px}
+    .tag{display:inline-block;color:var(--accent2);font-size:.8rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;margin-bottom:8px}
+    .card h3{font-size:1.35rem;line-height:1.25;margin:5px 0 12px}
+    .card p{color:var(--muted);margin-top:0}
+    .card ul{padding-left:20px;color:#d8e0f5}
+    .card li{margin:7px 0}
+    .actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:auto;padding-top:18px}
+    .btn{display:inline-block;text-decoration:none;color:#08101f;background:var(--accent2);font-weight:700;padding:10px 14px;border-radius:10px}
+    .btn.secondary{color:var(--text);background:transparent;border:1px solid #4a5d8d}
+    .stack{display:grid;grid-template-columns:1.2fr .8fr;gap:22px}
+    .box{background:#10182c;border:1px solid var(--line);border-radius:16px;padding:24px}
+    .box h3{margin-top:0}
+    .skills{display:flex;flex-wrap:wrap;gap:10px}
+    .skill{padding:8px 10px;background:#18243f;border-radius:8px;color:#dbe5ff;border:1px solid #2a3a61}
+    footer{margin-top:48px;padding-top:24px;border-top:1px solid var(--line);color:var(--muted);font-size:.92rem}
+    @media(max-width:900px){.grid{grid-template-columns:1fr}.stack{grid-template-columns:1fr}.card{min-height:auto}}
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <section class="hero">
+      <div class="eyebrow">Agentic AI • Technical Program Leadership • Applied AI</div>
+      <h1>Chantell Harris-Headley<br/>Agentic AI Portfolio</h1>
+      <p class="lead">A portfolio of hands-on AI systems demonstrating autonomous agents, multi-agent orchestration, Retrieval-Augmented Generation (RAG), tool use, workflow state management, evaluation concepts, privacy-oriented controls, and business-focused AI delivery.</p>
+      <div class="chips">
+        <span class="chip">Johns Hopkins University — Certificate Program in Agentic AI</span>
+        <span class="chip">Python</span><span class="chip">LangGraph</span><span class="chip">LangChain</span><span class="chip">RAG</span><span class="chip">ChromaDB</span><span class="chip">OpenAI</span><span class="chip">AI Workflow Design</span>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Featured Projects</h2>
+      <p class="section-intro">These projects were developed to demonstrate how agentic AI can be applied to business research, decision support, and coordinated multi-agent workflows. Public demos use sanitized or simulated data where appropriate.</p>
+      <div class="grid">
+        <article class="card">
+          <span class="tag">Autonomous Agent</span>
+          <h3>Autonomous Financial Research Agent</h3>
+          <p>A goal-oriented research agent that coordinates multiple tools to assemble evidence, analyze sentiment, retrieve relevant research, and synthesize a structured financial briefing.</p>
+          <ul>
+            <li>Autonomous tool selection and orchestration</li>
+            <li>Market data, news, sentiment, and historical analysis</li>
+            <li>RAG and vector retrieval concepts</li>
+            <li>LangGraph state management and routing</li>
+            <li>Error resilience, confidence, and source transparency</li>
+          </ul>
+          <div class="actions">
+            <a class="btn" href="https://huggingface.co/spaces/chantellharris/autonomous-financial-research-agent" target="_blank" rel="noopener">Live Demo</a>
+            <a class="btn secondary" href="https://github.com/g5ktjkr4fr-cpu/autonomous-financial-research-agent" target="_blank" rel="noopener">GitHub</a>
+          </div>
+        </article>
+
+        <article class="card">
+          <span class="tag">Multi-Agent System</span>
+          <h3>Multi-Agent Mortgage Underwriting</h3>
+          <p>A coordinated underwriting workflow using a Supervisor and specialized agents for credit, income, assets, collateral, review, and final decision support.</p>
+          <ul>
+            <li>Supervisor-based agent orchestration</li>
+            <li>Credit, Income, Asset, Collateral, Critic & Decision agents</li>
+            <li>RAG-based policy retrieval</li>
+            <li>Deterministic financial calculations</li>
+            <li>PII masking, risk scoring, and human-review escalation</li>
+          </ul>
+          <div class="actions">
+            <a class="btn" href="https://huggingface.co/spaces/chantellharris/multi-agent-mortgage-underwriting-demo" target="_blank" rel="noopener">Live Demo</a>
+            <a class="btn secondary" href="https://github.com/g5ktjkr4fr-cpu/multi-agent-mortgage-underwriting" target="_blank" rel="noopener">GitHub</a>
+          </div>
+        </article>
+
+        <article class="card">
+          <span class="tag">RAG + Analytics</span>
+          <h3>DualLens Analytics</h3>
+          <p>A decision-support concept that combines quantitative financial performance with qualitative company AI-strategy research to evaluate both business strength and innovation potential.</p>
+          <ul>
+            <li>Financial metrics and comparative analysis</li>
+            <li>RAG over company AI-strategy documents</li>
+            <li>Embeddings and semantic retrieval</li>
+            <li>Grounded LLM synthesis</li>
+            <li>Ranking and visualization of investment-oriented signals</li>
+          </ul>
+          <div class="actions">
+            <span class="btn secondary" style="cursor:default">Case Study</span>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section stack">
+      <div class="box">
+        <h3>What These Projects Demonstrate</h3>
+        <p>My focus is not only on making an agent run. I approach AI systems as programs that require clear business objectives, defined workflows, state and dependency management, measurable acceptance criteria, risk controls, testing, documentation, and stakeholder-ready communication.</p>
+        <div class="skills">
+          <span class="skill">Agent Architecture</span><span class="skill">Tool Calling</span><span class="skill">Multi-Agent Orchestration</span><span class="skill">RAG</span><span class="skill">Prompt Design</span><span class="skill">State Management</span><span class="skill">Error Handling</span><span class="skill">Responsible AI</span><span class="skill">Human-in-the-Loop</span><span class="skill">Evaluation Concepts</span><span class="skill">Technical Documentation</span><span class="skill">Program Delivery</span>
+        </div>
+      </div>
+      <div class="box">
+        <h3>Portfolio Positioning</h3>
+        <p><strong>Target roles:</strong><br/>AI Program Manager<br/>Technical Program Manager — AI<br/>Agentic AI Program Lead<br/>AI Transformation / Enablement Lead</p>
+        <p><strong>Focus:</strong><br/>Bridging business objectives, technical teams, AI system design, governance, and delivery.</p>
+      </div>
+    </section>
+
+    <footer>
+      <strong>Chantell Harris-Headley</strong> — Technical Project / Program Manager | Agentic AI | AI Workflows & Automation | Digital Transformation<br/>
+      Portfolio demos are educational and use sanitized, simulated, or public data where appropriate. They are not financial, lending, or investment advice.
+    </footer>
+  </main>
+</body>
+</html>
